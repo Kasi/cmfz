@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.cmfz.dao.ArticleDao">
+    <sql id="selectSQL">
+        id,author_name,article_time,article_title,author_id,is_delete,is_show
+    </sql>
+
+    <select id="select" resultType="com.cmfz.entity.Article">
+        SELECT <include refid="selectSQL"></include> FROM article
+        <where>
+            <if test="id!=null">
+                ID = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="author_Name!=null and author_Name!=‘’">
+                AND AUTHOR_NAME = #{author_Name,jdbcType=VARCHAR}
+            </if>
+            <if test="article_Time!=null">
+                AND ARTICLE_TIME = #{article_Time,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="article_Title!=null and article_Title!=''">
+                AND ARTICLE_TITLE = #{article_Title,jdbcType=VARCHAR}
+            </if>
+            <if test="author_Id!=null and author_Id!=''">
+                AND AUTHOR_ID=#{author_Id,jdbcType=VARCHAR}
+            </if>
+            <if test="is_Delete!=null">
+                AND IS_DELETE = #{is_Delete,jdbcType=INTEGER}
+            </if>
+            <if test="is_Show!=null">
+                AND IS_SHOW = #{is_Show,jdbcType=INTEGER}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="selectTotalNumber" resultType="java.lang.Integer">
+        SELECT count(id) FROM  article
+    </select>
+
+    <select id="selectPage" resultType="com.cmfz.entity.Article">
+        SELECT<include refid="selectSQL"/>FROM article LIMIT #{start,jdbcType=INTEGER},10
+
+
+    </select>
+
+    <select id="selectTotalByAuthor" resultType="java.lang.Integer">
+        SELECT count(author_id) FROM article WHERE author_id = #{author_id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="update">
+        UPDATE article
+        <set>
+            <if test="author_Name!=null">
+                AUTHOR_NAME = #{author_Name,jdbcType=VARCHAR},
+            </if>
+            <if test="article_Time!=null">
+                ARTICLE_TIME = #{article_Time,jdbcType=TIMESTAMP},
+            </if>
+
+            <if test="article_Title!=null">
+                ARTICLE_TITLE = #{article_Title,jdbcType=VARCHAR},
+            </if>
+            <if test="is_Delete!=null">
+                IS_DELETE = #{is_Delete,jdbcType=INTEGER},
+            </if>
+            <if test="is_Show!=null">
+                IS_SHOW = #{is_Show,jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE ID = #{id,jdbcType=VARCHAR} AND AUTHOR_ID =#{author_Id,jdbcType=VARCHAR}
+    </update>
+
+
+    <insert id="insert">
+        INSERT INTO article VALUES
+        (#{id,jdbcType=VARCHAR},#{author_Name,jdbcType=VARCHAR},curdate(),#{article_Title,jdbcType=VARCHAR},#{author_Id,jdbcType=VARCHAR},2,1)
+    </insert>
+    <delete id="delete">
+        DELETE FROM article WHERE author_id = #{author_id,jdbcType=VARCHAR} AND WHERE ID IN
+        <foreach collection="idss" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByids">
+        DELETE FROM article WHERE ID IN
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteByAuthorId">
+        DELETE FROM article WHERE author_id = #{author_id,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectDay7" resultType="com.cmfz.vo.Day7VO">
+        SELECT
+        case weekday(article_time)
+        when 0 then '星期一'
+        when 1 then '星期二'
+        when 2 then '星期三'
+        when 3 then '星期四'
+        when 4 then '星期五'
+        when 5 then '星期六'
+        when 6 then '星期日'
+        end
+        as week ,count(article_time) as number FROM article  where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <![CDATA[<=]]> date(article_time) group by article_time order by weekday(article_time) asc ;
+
+
+    </select>
+</mapper>

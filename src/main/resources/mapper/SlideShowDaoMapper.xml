@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.cmfz.dao.SlideShowDao">
+    <select id="select" resultType="com.cmfz.entity.SlideShow">
+        SELECT * FROM Slide_Show
+        <where>
+            <if test="id!=null">
+                ID =#{id,jdbcType=VARCHAR}
+            </if>
+            <if test="img_Path!=null">
+                AND IMG_PATH = #{img_Path,jdbcType=VARCHAR}
+            </if>
+            <if test="img_Name!=null">
+                AND IMG_NAME = #{img_Name,jdbcType=VARCHAR}
+            </if>
+            <if test="is_Delete!=null">
+                IS_DELETE = #{is_Delete,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCont" resultType="java.lang.Integer">
+        SELECT count(id) FROM Slide_Show
+    </select>
+
+    <insert id="insert">
+        INSERT INTO Slide_Show VALUES
+        (#{id,jdbcType=VARCHAR},#{img_Path,jdbcType=VARCHAR},#{img_Name,jdbcType=VARCHAR},#{is_Delete,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="inserts">
+        INSERT INTO Slide_Show VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id,jdbcType=VARCHAR},#{item.img_Path,jdbcType=VARCHAR},#{item.img_Name,jdbcType=VARCHAR},#{item.is_Delete,jdbcType=VARCHAR})
+        </foreach>
+
+
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        <!--批量拼接-->
+        DELETE FROM Slide_Show WHERE ID IN
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <update id="update">
+        UPDATE Slide_Show
+        <set>
+            <if test="img_Path!=null">
+                IMG_PATH = #{img_Path,jdbcType=VARCHAR},
+            </if>
+
+            <if test="img_Name!=null">
+                IMG_NAME = #{img_Name,jdbcType=VARCHAR},
+            </if>
+
+            <if test="is_Delete!=null">
+                IS_DELETE = #{is_Delete,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectPage" resultType="com.cmfz.entity.SlideShow">
+        SELECT * FROM Slide_Show LIMIT #{page,jdbcType=INTEGER},5
+    </select>
+</mapper>

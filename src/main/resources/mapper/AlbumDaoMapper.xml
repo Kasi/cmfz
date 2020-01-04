@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.cmfz.dao.AlbumDao">
+    <select id="select" resultType="album">
+        SELECT * FROM Album
+        <where>
+            <if test="id!=null">
+                ID =#{id,jdbcType=VARCHAR}
+            </if>
+            <if test="album_Name!=null ">
+                AND ALBUM_NAME =#{album_Name,jdbcType=VARCHAR}
+            </if>
+            <if test="album_Star!=null ">
+                AND ALBUM_STAR =#{album_Star,jdbcType=INTEGER}
+            </if>
+            <if test="album_Mid!=null">
+                AND ALBUM_MID = #{album_Mid,jdbcType=VARCHAR}
+            </if>
+            <if test="album_Bname!=null ">
+                AND ALBUM_BNAME = #{album_Bname,jdbcType=VARCHAR}
+            </if>
+            <if test="album_Ctime!=null ">
+                AND ALBUM_CTIME = #{album_Ctime,jdbcType=DATE}
+            </if>
+            <if test="album_Img_Path!=null ">
+                AND ALBUM_IMG_PATH = #{album_Img_Path,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <update id="update">
+        UPDATE Album
+        <set>
+            <if test="album_Name!=null and album_Name!=' '.toString()">
+                ALBUM_NAME =#{album_Name,jdbcType=VARCHAR},
+            </if>
+            <if test="album_Star!=null ">
+                ALBUM_STAR =#{album_Star,jdbcType=INTEGER},
+            </if>
+            <if test="album_Mid!=null and album_Name!=' '.toString()">
+                ALBUM_MID = #{album_Mid,jdbcType=VARCHAR},
+            </if>
+            <if test="album_Bname!=null and album_Name!=' '.toString()">
+                ALBUM_BNAME = #{album_Bname,jdbcType=VARCHAR},
+            </if>
+            <if test="album_Ctime!=null ">
+                ALBUM_CTIME = #{album_Ctime,jdbcType=DATE},
+            </if>
+            <if test="album_Img_Path!=null and album_Name!=' '.toString()">
+                ALBUM_IMG_PATH = #{album_Img_Path,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE ID =#{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO Album VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{album_Name,jdbcType=VARCHAR},
+        #{album_Star,jdbcType=INTEGER},
+        #{album_Mid,jdbcType=VARCHAR},
+        #{album_Bname,jdbcType=VARCHAR},
+        #{album_Ctime,jdbcType=DATE},
+        #{album_Img_Path,jdbcType=VARCHAR}
+
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM Album WHERE ID IN
+        <foreach collection="aids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </delete>
+
+    <select id="selectPage" resultType="album">
+        SELECT * FROM Album LIMIT #{start,jdbcType=INTEGER},5
+    </select>
+
+    <select id="selectTotalNumber" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM  Album
+    </select>
+
+
+    <select id="selectYear" resultType="com.cmfz.vo.MonthVO">
+select count(a2.timee) as number, concat(month(max(a2.album_ctime))) as month
+from (
+         select month(album_ctime) as timee, a1.*
+         from Album a1
+     ) a2
+group by timee;
+    </select>
+
+
+</mapper>

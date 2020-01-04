@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: test
+  mvc: #视图解析器
+    view:
+      prefix: /WEB-INF/
+      suffix: .jsp
+    date-format: yyyy-MM-dd
+  datasource:
+    url: jdbc:mysql://192.168.76.139:3306/cmfz?characterEncoding=utf8
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: Root_12root
+    driver-class-name: com.mysql.jdbc.Driver
+  http: #指定请求响应时候的编码
+    encoding:
+      charset: UTF-8
+      force: true
+      force-response: true
+      force-request: true
+  redis:
+    database: 0
+    timeout: 5000 #连接超时时间
+    host: 192.168.76.142 #redis服务器地址
+    port: 6666 #端口
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.76.143:9300
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.cmfz.entity
+logging: #设置日志等级
+  level:
+    root: info
+    com.cmfz.dao: debug

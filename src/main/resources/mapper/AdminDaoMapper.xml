@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.cmfz.dao.AdminDao">
+    <select id="selectByName" resultType="com.cmfz.entity.Admin">
+        SELECT * FROM admin where USER_NAME = #{userName,jdbcType=VARCHAR}
+    </select>
+
+    <update id="update">
+        UPDATE admin set last_time = #{time,jdbcType=DATE} where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

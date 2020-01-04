@@ -1,0 +1,19 @@
+{
+  "page": 1,
+  "rows": [
+    {
+      "id": "1",
+      "img_Path": "shouye.jpg",
+      "img_Name": "这是图片",
+      "is_Delete": "1"
+    },
+    {
+      "id": "2",
+      "img_Path": "bg-01.jpg",
+      "img_Name": "这是图片啊",
+      "is_Delete": "1"
+    }
+  ],
+  "records": 20,
+  "total": 5
+}

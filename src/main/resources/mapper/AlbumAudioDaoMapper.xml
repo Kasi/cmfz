@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.cmfz.dao.AlbumAudioDao">
+    <select id="select" resultType="albumAudio">
+        SELECT * FROM album_audio
+        <where>
+            <if test="id!=null">
+                ID =#{id,jdbcType=VARCHAR}
+            </if>
+            <if test="audio_Size!=null ">
+                AND AUDIO_SIZE = #{audio_Size,jdbcType=VARCHAR}
+            </if>
+            <if test="audio_Name!=null ">
+                AND audio_Name = #{audio_Name,jdbcType=VARCHAR}
+            </if>
+            <if test="audio_Url!=null ">
+                AND AUDIO_URL = #{audio_Url,jdbcType=VARCHAR}
+            </if>
+            <if test="is_Delete!=null ">
+                AND IS_DELETE = #{is_Delete,jdbcType=INTEGER}
+            </if>
+            <if test="audio_Time!=null ">
+                AND AUDIO_TIME = #{audio_Time,jdbcType=TIMESTAMP}
+            </if>
+            <if test="album_Id">
+                AND ALBUM_ID = #{album_Id,jdbcType=VARCHAR}
+            </if>
+            <if test="audio_Timelong">
+                AND AUDIO_TIMELONG = #{audio_Timelong,jdbcType=VARCHAR}
+            </if>
+
+
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO album_audio VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{audio_Size,jdbcType=VARCHAR},
+        #{audio_Name,jdbcType=VARCHAR},
+        #{audio_Url,jdbcType=VARCHAR},
+        #{is_Delete,jdbcType=INTEGER},
+        #{audio_Time,jdbcType=TIMESTAMP},
+        #{album_Id,jdbcType=VARCHAR},
+        #{audio_Timelong,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE album_audio
+        <set>
+            <if test="audio_Size!=null and audio_Size!=' '.toString()">
+                AUDIO_SIZE = #{audio_Size,jdbcType=VARCHAR},
+            </if>
+            <if test="audio_Name!=null and audio_Name!=' '.toString()">
+                audio_Name = #{audio_Name,jdbcType=VARCHAR},
+            </if>
+            <if test="audio_Url!=null and audio_Url!=' '.toString()">
+                AUDIO_URL = #{audio_Url,jdbcType=VARCHAR},
+            </if>
+            <if test="is_Delete!=null and is_Delete!=' '.toString()">
+                IS_DELETE = #{is_Delete,jdbcType=INTEGER},
+            </if>
+            <if test="audio_Time!=null">
+                AUDIO_TIME = #{audio_Time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="album_Id!=null and album_Id!=' '.toString()">
+                ALBUM_ID = #{album_Id,jdbcType=VARCHAR},
+            </if>
+            <if test="audio_Timelong !=null and audio_Timelong!=' '.toString()">
+                AUDIO_TIMELONG = #{audio_Timelong,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        WHERE ID =#{id,jdbcType=VARCHAR}
+
+    </update>
+
+    <delete id="delete">
+        DELETE FROM album_audio WHERE ID IN
+        <foreach collection="aaids" open="(" item="item" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectPage" resultType="albumAudio">
+        SELECT * FROM album_audio WHERE album_id = #{parentId,jdbcType=VARCHAR} LIMIT #{start,jdbcType=INTEGER},5
+    </select>
+
+    <select id="selectTotalNumber" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM album_audio WHERE album_id = #{parentId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByIds" resultType="albumAudio">
+        SELECT * FROM album_audio WHERE ID IN
+        <foreach collection="idss" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <delete id="deleteByParentId">
+        DELETE FROM album_audio WHERE album_id IN
+        <foreach collection="pids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </delete>
+
+</mapper>
