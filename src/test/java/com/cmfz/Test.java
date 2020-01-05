@@ -25,6 +25,6 @@ public class Test {
 
         System.out.println(s);
 
-        System.out.println(999);
+        System.out.println(6666);
     }
 }
