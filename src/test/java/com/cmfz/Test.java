@@ -28,5 +28,6 @@ public class Test {
         System.out.println(6666);
         System.out.println(88989);
         System.out.println(88989);
+        System.out.println(88989);
     }
 }
