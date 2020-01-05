@@ -30,4 +30,8 @@ public class Test {
         System.out.println(88989);
         System.out.println(88989);
     }
+
+    public static void t1(){
+
+    }
 }
