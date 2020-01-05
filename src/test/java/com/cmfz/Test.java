@@ -22,7 +22,7 @@ public class Test {
     public static void main(String[] args) {
         //GitHub
         String s = DigestUtils.md5Hex("123456a54121f4-2c44-4f06-b732-aa2160cc3e8d");
-
+        System.out.println(s);
         System.out.println(s);
 
         System.out.println(6666);
